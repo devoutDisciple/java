@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 导入配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!-- 配置连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<bean id="baseDAO" class="org.springframework.jdbc.core.support.JdbcDaoSupport" abstract="true">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="accountDAOImpl" class="com._520it.day3.transction.AccountDAOImpl" parent="baseDAO"/>
+		
+	<bean id="accountDAOService" class="com._520it.day3.transction.AccountServiceImpl">
+		<property name="dao" ref="accountDAOImpl"></property>
+	</bean>
+	
+	<!-- 
+		spring中的事务管理器
+		1：事务要开在service上面
+		2：PlatformTranscationManager：spring中的事务管理器
+			1：TransactionStatus getTransaction()开启事务
+			2:void commit(transactionStatus status)提交事务
+			3：void rollback(TransactionStatus status)回滚事务
+		3：transactionStatus:可以简单理解为创建的事务对象
+		4：spring中提供的常用事务管理器
+			jdbc中的：
+			jdbc：conn.setAutoCommit(false);
+			conn.commit();
+			conn.rollback();
+			Hibernate中的：
+			session.beginTranscation();
+			tx.commit();
+			tx.rollback();
+		5:我们需要注意
+			1：DataSoutceTranscationManager:针对JDBC
+			2：HibernateTranscationManager：针对Hibernate(版本)
+			3：JpaTransactionManager：针对JPA
+	 -->
+	 <!-- spring管理事务
+	 	1：配置一个和我们持久化方式相匹配的事务管理器
+	 	2：因为我们使用的是JDBC，所以选择DataSourceTransactionManager；
+	 		1：在这个txManager中一定要传入一个DataSource；
+	 		2：有这个dataSource来得到连接，管理事务
+	 		3：注意，这个传入的dataSource已经被spring代理过了，在调用getConnection的时候，实际上得到的是当前线程中的COnnection；
+	 	3：配置事务
+	 		1：配置dataSource
+	 		2：配置baseDAO和transactionManager（使用同一个dataSource）
+	 		3：配置service
+	 		4：配置事务通知
+	 			1：名字（id）；呗切面引用
+	 			2：transaction-manager：在事务通知中，真正的执行开启事务，提交事务，回滚
+	 			3：配置事务属性，控制拦截到的不同的方法，具体怎么处理事务
+	 		5：配置aop
+	 			1：配置切入点
+	 			2：配置aop：advisor（把通知和切入点连接起来）
+	 	4:配置事务属性
+	 		1：tx：method是从上向下匹配的，一般最后一个tx：method的name=“*”，用来匹配剩余匹配不到的事务
+	 		2：read-only：开启一个只读的事务，只读事务性能较高，不能再只读的事务中做DML操作
+	 		3：isolation：隔离级别
+	 			1：DEFAULT：使用数据库默认的隔离级别
+	 			2：注意一般填写DEFAULT
+	 		4：rollbac-for：遇到什么异常事务要回滚（默认下，spring只有遇到RuntimeException才会回滚）
+	 		5：propagation：事务的传播方式
+	  -->
+	 
+	 
+	 <!-- 配置事务管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 配置事务 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com._520it.day3.transction.AccountServiceImpl.*(..))" id="pc"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pc"/>
+	</aop:config>
+	
+	<!-- 
+		理解为spring事务的通知
+		1：要配置一个id，这个id是拿给AOP来用
+		2：要配置一个transcation-manager，注意，如果你的transcationManager的名字就是transcationManager，就可以省略不配
+		CRUD的advice实例
+	 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 配置在我拦截到的对象中，每个方法怎么去处理事务 -->
+			<tx:method name="*"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+
+
+
+
+
+
+
+
+
+</beans>

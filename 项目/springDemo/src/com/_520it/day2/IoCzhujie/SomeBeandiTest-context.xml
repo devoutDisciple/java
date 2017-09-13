@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 
+		如果要使用IoC的注解，一定要配置一个context：component-scan，
+		base-package代表让spring去扫描包机器子包里面的类
+		如果要配置多个包，包之间要用逗号隔开；
+	 -->
+
+	<context:component-scan base-package="com._520it.day2.IoCzhujie" />
+	
+</beans>
+
+
+
+
+
+
+
+
+
+

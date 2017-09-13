@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com._520it.hibernate">
+
+	<!-- class代表要映射的内容，name属性是久化类(或者接口)的Java全限定名,如果这个属性不存在,则Hibernate将假定这是一个非POJO的实体映射
+		tabel代表要把对象保存到的表
+	 -->
+	<class name="Student" table="student">
+		<id name="id" column="id">
+			<generator class="native" />
+		</id>
+		<!-- 映射属性 -->
+		<property name="username" column="username" />
+		<property name="password" column="password" />
+	</class>
+	
+
+</hibernate-mapping>

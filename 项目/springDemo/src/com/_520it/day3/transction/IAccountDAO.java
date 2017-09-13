@@ -1,0 +1,8 @@
+package com._520it.day3.transction;
+
+public interface IAccountDAO {
+
+	public void transout(Long id, Double money);
+
+	void transin(Long id, Double money);
+}

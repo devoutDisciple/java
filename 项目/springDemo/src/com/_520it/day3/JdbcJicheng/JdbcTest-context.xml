@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- 导入配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!-- 配置连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!-- 配置datasource可以写成这样，也可以写成配置文件的形式 <property name="driverClassName" value="com.mysql.jdbc.Driver" 
+			/> <property name="url" value="jdbc:mysql:///spring" /> <property name="username" 
+			value="root" /> <property name="password" value="admin" /> -->
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<!-- spring配置文件的继承
+		配置一个父类bean，然后让bean继承该父类，子类中就有dataSource了 ；
+		抽象的类是不能直接配置在spring中的，需要在bean元素上面天剑abtract=true属性
+		子类要继承父类的配置，必须在bean上面加上parent属性
+		在spring配置文件中是没有继承的概念的
+		一个bean是可以没有class属性的，但是该bean没有class属性，name一定要添加abstract=true，代表这个bean是不需要去实例化的，这个bean是用来给其他的配置文件继承的
+		parent属性并不是代表继承的关系，它代表的是配置文件的拷贝
+	-->
+	<bean id="baseDAO" class="org.springframework.jdbc.core.support.JdbcDaoSupport" abstract="true">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="employeeDAO" class="com._520it.day3.JdbcJicheng.EmployeeDAOImpl" parent="baseDAO"/>
+		
+
+
+</beans>

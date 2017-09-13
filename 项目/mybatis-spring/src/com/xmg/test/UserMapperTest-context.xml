@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<context:property-placeholder location="classpath*:db.properties"/>
+	
+	<!-- 配置dataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${db.driver}"/>
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
+	</bean>
+	
+	<!-- 配置sqlsessionfactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="typeAliasesPackage" value="com.xmg.domain" />
+		<property name="mapperLocations" value="classpath:com/xmg/mapper/*Mapper.xml" />
+	</bean>
+	
+	<bean id="baseMapper" abstract="true" class="org.mybatis.spring.mapper.MapperFactoryBean"></bean>
+	
+	<!-- 配置mapper -->
+	<bean id="userMapper" parent="baseMapper">
+		<property name="mapperInterface" value="com.xmg.mapper.UserMapper" />
+	</bean>
+	
+	
+	<bean id="userService" class="com.xmg.service.UserServiceImpl">
+		<property name="userMapper" ref="userMapper"></property>
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 配置切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.xmg.service.*Service.*(..))" id="pc"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pc"/>
+	</aop:config>
+	
+	<!-- 
+		理解为spring事务的通知
+		1：要配置一个id，这个id是拿给AOP来用
+		2：要配置一个transcation-manager，注意，如果你的transcationManager的名字就是transcationManager，就可以省略不配
+		CRUD的advice实例
+	 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 配置在我拦截到的对象中，每个方法怎么去处理事务 -->
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/> 
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	
+</beans>

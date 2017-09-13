@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<!-- 引入配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<!-- 配置dataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${db.driverClassName}"/>
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
+	</bean>
+	<!-- 配置sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 配置连接信息 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 
+			配置hibernate信息 
+			如果resource里面有个hibernate.properties,spring会自动将其里面的配置作为hibernate的配置项
+		
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MYSQLDialect
+				hibernate.hbm2ddl.auto=create
+				hibernate.show_sql=true
+			</value>
+		</property>
+		-->
+		<!-- 
+			配置映射文件
+			配置的是hbm.xml文件所在的目录地址，spring会自动的扫描这些目录，把所有的hbm.xml文件自动映入
+		-->
+		<property name="mappingDirectoryLocations" value="classpath:com/_520it/domain"/>
+	</bean>
+	<!-- 配置一个父类baseDAO -->
+	<bean id="baseDAO" abstract="true">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="employeeDAO" class="com._520it.dao.impl.EmployeeDAOImpl" parent="baseDAO"/>
+	
+	<bean id="employeeService" class="com._520it.service.impl.EmployeeServiceImpl">
+		<property name="dao" ref="employeeDAO"/>
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager ">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 配置事务切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com._520it.service.*Service.*(..))" id="crudPC"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="crudPC"/>
+	</aop:config>
+	<!-- 配置事务属性 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 配置struts2 -->
+	<bean id="employeeAction" class="com._520it.mvc.EmployeeAction" scope="prototype">
+		<property name="employeeService" ref="employeeService"></property>
+	</bean>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

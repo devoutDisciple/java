@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    	<!-- 
+    		action的class不能写com._520it.mvc.EmployeeAction 
+    		要写在spring中为该类配置的id
+    		使用该项配置要使用struts2-spring-plugin-2.3.24.jar
+    	-->
+        <action name="emp_*" method="{1}" class="employeeAction">
+            <result name="list">/WEB-INF/jsps/emp/list.jsp</result>
+        </action>
+    </package>
+
+</struts>

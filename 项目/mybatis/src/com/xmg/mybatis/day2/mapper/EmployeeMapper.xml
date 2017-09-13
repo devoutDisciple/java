@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmg.mybatis.day2.mapper.EmployeeMapper">
+
+	<resultMap type="Employee" id="employee_mapping">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<!-- 
+			association:代表一个关系（mybatis中使用association去映射一个对象）
+			1：property：在对象中这个关系的属性
+			2：column：在数据库中那个列反应这个关系
+			3：javaType：关联的对象是什么类型
+			4：select：使用哪个SQL去查询关联的对象
+		 -->
+		<association property="dept" column="dept_id" javaType="Department" select="com.xmg.mybatis.day2.mapper.DepartmentMapper.get"></association>
+	</resultMap>
+	
+	<!-- 内联的映射 -->
+	<resultMap type="Employee" id="employee_list">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<association property="dept" javaType="Department">
+			<id property="id" column="did"/>
+			<result property="name" column="dname"/>
+		</association>
+	</resultMap>
+	
+	<insert id="add" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="Employee">
+		insert into employee (name, dept_id) values (#{name},#{dept.id})
+	</insert>
+	
+	<select id="get" resultMap="employee_mapping">
+		select * from employee where id = #{id}
+	</select>
+	
+	<select id="list1" resultMap="employee_mapping">
+		select * from employee
+	</select>
+	
+	<select id="list2" resultMap="employee_list">
+		select e.id,e.name,d.id as did, d.name as dname
+		from employee e left join dept d on e.dept_id = d.id
+	</select>
+	
+	
+
+
+</mapper>

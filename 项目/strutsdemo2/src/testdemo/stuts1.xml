@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="hellospk" namespace="/hello" extends="struts-default">
+		<action name="demo_*" class="testdemo.Demo" method="{1}">
+			<result name="list" type="dispatcher">/abc/list.jsp</result>
+			<result name="edit" type="dispatcher">/abc/edit.jsp</result>
+			<result name="welcome" type="dispatcher">/abc/welcome.jsp</result>
+		</action>
+	</package>
+</struts>

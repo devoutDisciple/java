@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 
+		init-method:告诉spring，somebean对象的初始化方法名称，初始化方法是不能有参数的
+		destroy-method：告诉spring，somebean对象的销毁方法名称，销毁方法是不能有参数的
+	 -->
+	 <!-- 1：该配置文件必须在项目包里面 ；2：该文件名必须是测试类的名字加上-context -->
+	<bean id="somebean" class="com._520it.day1.initBean.SomeBean" init-method="save" destroy-method="get"/>
+	
+</beans>

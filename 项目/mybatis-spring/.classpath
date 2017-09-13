@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="sources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JRE"/>
+	<classpathentry kind="lib" path="lib/asm-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis-3.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aspects-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-build-src-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-instrument-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-jdbc-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-jms-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-messaging-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-orm-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-oxm-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-test-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-tx-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-web-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-webmvc-4.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis-spring-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/com.springsource.org.aopalliance-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/druid-1.0.15.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.26-bin.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

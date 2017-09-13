@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- spring是一个放java对象的容器,把放在spring容器里面的beans成为javabean -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="otherbean" class="com._520it.day2.di.OtherBean" />
+	
+	<!-- 通过setter注入
+		1：在bean元素中，可以通过property属性，使用setter方法，为bean注入依赖的值
+		2：对于简单之，直接使用property的value属性复制
+		3：在配置文件中全是字符串，要能够匹配对象中的类型，spring内部会经过类型的转换
+		 -->
+	<bean id="somebean" class="com._520it.day2.di.SomeBean"></bean>
+	
+</beans>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- mybatis的配置 -->
+<configuration>
+	<!-- 加载配置文件 -->
+	<properties resource="db.properties"/>
+	
+	<settings>
+		<!-- 全局启用或禁用延迟加载。当禁用时, 所有关联对象都会即时加载。 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		
+		<!-- 当启用时, 有延迟加载属性的对象在被调用时将会完全加载任意属性。否则, 每种属性将会按需要加载。 -->
+		<setting name="aggressiveLazyLoading" value="false"/>
+		
+		<!-- Object对象上面的哪些方法触发延迟加载。 -->
+		<setting name="lazyLoadTriggerMethods" value="clone"/>
+	</settings>
+	
+	<!-- 为类型添加别名,然后在本个项目中可以使用该别名 -->
+	<typeAliases>
+		<typeAlias type="com.xmg.mybatis.domain.User" alias="User" />
+		<typeAlias type="com.xmg.mybatis.day2.domain.Department" alias="Department" />
+		<typeAlias type="com.xmg.mybatis.day2.domain.Employee" alias="Employee" />
+	</typeAliases>
+	
+	<!-- 环境 default对应环境的id，代表mybatis这次默认使用的数据库环境 -->
+	<environments default="default">
+		<!-- 一个environment代表一个数据库环境 -->
+		<environment id="default">
+			<!-- 配置事务管理器 直接配置JDBC（一定要大些），代表使用JDBC事务 -->
+			<transactionManager type="JDBC"/>
+			<!-- 数据库连接池 要求大些 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="com/xmg/mybatis/domain/UserMapper.xml"/>
+		<mapper resource="com/xmg/mybatis/day2/mapper/DepartmentMapper.xml"/>
+		<mapper resource="com/xmg/mybatis/day2/mapper/EmployeeMapper.xml"/>
+	</mappers>
+	
+	<!-- 
+		mybatis监控sql 
+		1：在classpath创建log4j.properties
+		#Global logging configuration
+		log4j.rootLogger=ERROR, stdout
+		
+		#MyBatis logging configuration... 
+		#把后面的包修改为要监控的mapper所在的包
+		log4j.logger.com.xmg.mybatis=TRACE
+		
+		#Console output..
+		log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+		log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+		log4j.appender.stdout.layout.ConversionPattern=%5p [%t] -%m%n
+	-->
+</configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

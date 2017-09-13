@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<bean name="/hello" class="com.xmg.springmvc.controller.Hello" />
+	<bean class="com.xmg.springmvc.controller.Hello2" />
+	<!-- id属性要求必须在spring中唯一的 如果我们的bean需要其他的名字，可以通过name属性为一个bean配置更多的名字，并且可以用逗号，分号或者空格来分割 
+		<bean id="helloword" class="com._520it.springDemo.HelloWordImpl" />-->
+	
+	<!-- <import resource="com/_520it/toTest/name.xml"/> -->
+</beans>

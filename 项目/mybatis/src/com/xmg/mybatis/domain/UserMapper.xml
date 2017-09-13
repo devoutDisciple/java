@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmg.mybatis.domain.UserMapper">
+
+	<!-- 
+		resultMap代表结果集和对象的映射关系
+		type：映射对应的类型是谁，对应着本项目中Mybatis-config.xml中配置的typeAlias
+		id：为这个映射关系起一个名字，下面的sql语句中的parameterType用该id
+	 -->
+
+	<resultMap type="User" id="user_mapping">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="password" property="password"/>
+		<result column="email" property="email"/>
+		<result column="date" property="date"/>
+	</resultMap>
+	<!-- 
+		keyColumn:主键的列
+		keyProperty：主键对应的属性
+		useGenerateKeys：使用数据库自动生成的主键id值设置到对象的OID中
+		parameterType：参数的类型,此处用的是别名，配置在mybatis-config.xml中,
+		resultMap:返回值要对应的resultMap，要在上面配置
+		resultType：返回值的类型
+		一个sql只能有一个resultMap或者resultType
+	 -->
+	<insert id="add" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="User">
+		insert into user (name,password,email,date) values (#{name},#{password},#{email},#{date})
+	</insert>
+	<update id="update" parameterType="User">
+		update user
+		<set>
+			<if test="name!=null">
+				name = #{name},
+			</if>
+			<if test="password!=null">
+				password = #{password},
+			</if>
+			<if test="date!=null">
+				email = #{email},
+			</if>
+			<if test="date!=null">
+				 date = #{date},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		delete from user where id = #{id}
+	</delete>
+	
+	<select id="get" parameterType="long" resultMap="user_mapping">
+		select id, name, password, email, date from user where id = #{id}
+	</select>
+	
+	<select id="list" resultMap="user_mapping">
+		select * from user
+	</select>
+	
+	<!-- 提取sql -->
+	<sql id="user_where">
+		<where>
+			<if test="name!null">
+				and name like concat('%',#{name},'%')
+			</if>
+			<if test="beginAge>-1">
+				and age &gt; #{beginAge}
+			</if>
+			<if test="endAge>-1">
+				and age &lt; #{endAge}
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查询总数 -->
+	<select id="queryForCount" parameterType="com.xmg.mybatis.query.UserQueryObject" resultType="int">
+		select count(id) from user
+		<include refid="user_where"></include>
+	</select>	
+	<!-- 查询分页内容 -->
+	<select id="query" parameterType="com.xmg.mybatis.query.UserQueryObject" resultMap="user_mapping">
+		select * from user <include refid="user_where"></include>
+		<if test="pageSize>-1">
+			limit #{start},#pageSize
+		</if>
+	</select>	
+	
+	<!-- 查询登录1 -->
+	<select id="login1" parameterType="com.xmg.mybatis.query.UserQueryObject" resultMap="user_mapping">
+		select * from user where name=#{name} and email=#{email}
+	</select>	
+	
+	<!-- 查询登录2 -->
+	<select id="login2" parameterType="com.xmg.mybatis.query.UserQueryObject" resultMap="user_mapping">
+		select * from user where name=#{name} and email=#{email}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

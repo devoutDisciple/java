@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="sources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JRE"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/asm-3.3.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/cglib-2.2.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/mybatis-3.1.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/mysql-connector-java-5.1.26-bin.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/slf4j-api-1.6.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/slf4j-log4j12-1.6.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="web/WEB-INF/classes"/>
+</classpath>

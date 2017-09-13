@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 导入配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!-- 配置连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	
+	 <!-- 配置事务管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 
+		引入该元素相当于引入接卸@transactional标签的第三方程序
+		这个标签默认的transaction-manager名字是transcationManager，如果不是，必须重置
+	 -->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	<!-- 扫描类中的@Autowired注解 -->
+	<context:component-scan base-package="com._520it.day3.transactionZhujie"/>
+	
+	<!-- 
+		使用Annotation配置事务
+		1：在service方法或者类上加@Transactional标签
+			1：在类上，相当于为类中所有的方法都加上了事务控制方式
+			2：如果要覆盖掉默认的方式，只需要在方法上面重新写一次@Transactionl
+		2：在spring的配置文件中，使用<tx:annotation-drivern>标签来引入用于解析@Transactional标签的第三方应用
+		3:建议使用配置文件的方式
+	 -->
+
+</beans>

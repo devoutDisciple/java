@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 使用context标签，头部要这样写 -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+	<context:component-scan base-package="com._520it.day2.aop" />
+
+	<bean id="aopdemo" class="com._520it.day2.aop.AopDemo" />
+
+	<bean id="txManager" class="com._520it.day2.aop.TxManager" />
+	<!-- 配置aop -->
+	<aop:config>
+		<!-- 
+			配置一个切入点 expression：这个切入点的表达式 id：这个切入点的名称 
+			execution(* com._520it.day2.aop.*.*Service(..))
+			标示运行的com._520it.day2.aop下面的类中的所有以Service结尾并且返回值为容易类型的方法
+			配置aop的时候，这两个类都要配置到spring容器中
+			我们在客户端还是直接注入的是在spring里面配置的真是对象
+			实际上，spring在为这些对象创建好代理对象之后，会使用这些创建好的代理对象去替换容器中的原始对象
+		-->
+		<aop:pointcut expression="execution(* com._520it.day2.aop.*.*Service(..))" id="pc" />
+		<!-- 配置一个切面 代表在这个切面的定义中，所有的做什么事情，都是有txManager这个对象的方法提供的 -->
+		<aop:aspect ref="txManager">
+			<!-- before在表在方法执行之前 after-retrurning代表在方法正常执行之后 after-throwing代表方法抛出异常的时候 -->
+			<aop:before method="save" pointcut-ref="pc" />
+			<aop:after-returning method="get" pointcut-ref="pc" />
+			<!-- 这里的ex必须和after方法中的形式参数的名称一样 -->
+			<aop:after-throwing method="after" pointcut-ref="pc" throwing="ex"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
+
+
+
+
+
+
+
+
+
+
